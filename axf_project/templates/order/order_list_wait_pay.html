@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+    <h3>待付款订单列表</h3>
+
+    <ul>
+        <!--订单信息展示-->
+        {% for order in orders %}
+            {% if order.o_status == 0 %}
+            <li>
+                <a href="/axf/wait_pay/?order_id={{ order.id }}">
+                    <p> 订单编号：{{ order.id }} <!-- 订单id --></p>
+
+                        <!--展示商品的名称-->
+                    {% for order_good in order.ordergoodsmodel_set.all %}
+                        <li>
+                            <img src="{{ order_good.goods.productimg }}" alt="">
+                            {{ order_good.goods.productlongname }}
+                            数量：{{ order_good.goods_num }}<!-- 数量 -->
+                        </li>
+                        <!--处理结束-->
+                    {% endfor %}
+                </a>
+            </li>
+            {% endif %}
+        {% endfor %}
+        <!--订单处理结束-->
+
+
+    </ul>
+
+
+{% endblock %}

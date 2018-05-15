@@ -1,0 +1,179 @@
+{% extends 'base_main.html' %}
+{% load static %}
+{% block extCSS %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'app/market/market.css' %}">
+{% endblock %}
+
+{% block EXTJS %}
+    <script type="text/javascript" src="{% static 'app/market/js/market.js' %}"></script>
+{% endblock %}
+
+
+{% block content %}
+
+    <div id="market">
+
+        <aside>
+
+            <ul>
+
+                <!--闪购分类展示-->
+                {% for type in types %}
+
+                    <li>
+                        <!--链接地址，点击获取分类下的商品信息-->
+{#                        <a href="/axf/market/?typeid={{ type.typeid }}">{{ type.typename }}</a>#}
+                        <a href="/axf/ttmarket/{{ type.typeid }}/{{ 0 }}/{{ 0 }}">{{ type.typename }}</a>
+
+                        {% ifequal typeid type.typeid %}
+                            <span class="yellowSlide"></span>
+                        {% endifequal %}
+
+                    </li>
+                <!--处理数据结束-->
+                {% endfor %}
+
+            </ul>
+
+        </aside>
+
+
+        <section>
+            <nav>
+                <ul>
+                    <li id="all_types"><span>全部类型<span id="all_type_logo"
+                                                       class="glyphicon glyphicon-chevron-down"></span></span></li>
+                    <li id="sort_rule"><span>综合排序<span id="sort_rule_logo" class="glyphicon glyphicon-chevron-down"></span></span></li>
+                </ul>
+            </nav>
+
+            <menu>
+                <ul>
+                    <!--商品信息展示-->
+                    {% for good in goods %}
+
+                        <li>
+                            <a href="#">
+                                <img src="{{ good.productimg }}" alt="">
+                                <div class="shoppingInfo">
+                                    <h6>{{ good.productname }}</h6>
+                                    <p class="detailTag">
+                                        <span>精选</span>
+                                        <span>{{ good.productlongname }}</span>
+                                    </p>
+                                    <p class="unit">
+
+                                    </p>
+                                    <p class="price">
+                                        <span>¥{{ good.price }}</span>
+                                        <s>¥{{ good.marketprice }}</s>
+                                    </p>
+                                </div>
+                            </a>
+                        <section>
+                            {% csrf_token %}
+                            <button onclick="sub_shop({{ good.id }})" >-</button>
+                            <span id="num_{{ good.id }}">0
+{#                                {% with foo = good.id %}#}
+{#                                    {% if good.id == cart_goods[good.id].0 %}#}
+{#                                        {{ cart_goods[good.id].1 }}#}
+{#                                    {% else %}#}
+{#                                        0#}
+{#                                    {% endif %}#}
+{#                                {% endwith %}#}
+                            </span>
+                            <button onclick="add_shop({{ good.id }})" >+</button>
+                        </section>
+                        </li>
+                    <!--处理数据结束-->
+                    {% endfor %}
+                    <script type="text/javascript" src="/static/js/jquery.js" ></script>
+                    <script type="text/javascript" src="/static/js/common.js" ></script>
+                    <script>
+                        $(function () {
+                            var csrf = $('input[name="csrfmiddlewaretoken"]');
+                            $.ajax({
+                                url: '/axf/cart_buy/',
+                                type: 'GET',
+                                dataType: 'json',
+                                headers: {'X-CSRFToken': csrf},
+                                success: function (msg) {
+                                    {#alert('ok');#}
+                                    var goods = msg.infos;
+                                    for(var i = 0; i < goods.length; i++){
+
+                                        $('#num_' + goods[i][0]).html(goods[i][1])
+                                    }
+                                },
+                                error: function (msg) {
+                                    {#alert('no')#}
+                                }
+                            })
+                        })
+                    </script>
+
+
+                </ul>
+
+                <div id="all_types_container">
+                    <div>
+                        <!--加载全部分类的数据-->
+
+                            {% for ctype in childtypes %}
+
+{#                            <a href="/axf/market/?childcidname={{ childtype.childcidname }}">#}
+{#                            <a href="/axf/ttmarket/{{ typeid }}/{{ ctype.1 }}/{{ 0 }}">#}
+                            <a href="{% url 'axf:tms' typeid ctype.1 0 %}">
+                                <span>{{ ctype.0 }}</span>
+                            </a>
+                                {% endfor %}
+                        <!--处理数据结束-->
+                        <script>
+
+                        </script>
+
+                    </div>
+                </div>
+
+
+                <div id="sort_container">
+                    <div>
+{#      排序传递的也是状态码   0 , 1 , 2 , 3 , 4 , 5...                    #}
+{#                        <a  href="/axf/market/?status=1" id="summary">#}
+{#                            <span>综合排序</span>#}
+{#                        </a>#}
+{#                        <a href="/axf/market/?status=2" id="productnum">#}
+{#                            <span>销量排序</span>#}
+{#                        </a>#}
+{#                        <a href="/axf/market/?status=3" id="price_decrease">#}
+{#                            <span>价格降序</span>#}
+{#                        </a>#}
+{#                        <a href="/axf/market/?status=4" id="price_increase">#}
+{#                            <span>价格升序</span>#}
+{#                        </a>#}
+                        <a  href="/axf/ttmarket/{{ typeid }}/{{ childcid }}/{{ 0 }}">
+                            <span>综合排序</span>
+                        </a>
+                        <a href="/axf/ttmarket/{{ typeid }}/{{ childcid }}/{{ 1 }}">
+                            <span>销量排序</span>
+                        </a>
+                        <a href="/axf/ttmarket/{{ typeid }}/{{ childcid }}/{{ 2 }}">
+                            <span>价格降序</span>
+                        </a>
+                        <a href="/axf/ttmarket/{{ typeid }}/{{ childcid }}/{{ 3 }}">
+                            <span>价格升序</span>
+                        </a>
+
+                    </div>
+                </div>
+
+            </menu>
+
+        </section>
+
+
+    </div>
+
+
+{% endblock %}

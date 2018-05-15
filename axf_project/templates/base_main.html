@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extCSS %}
+
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+{% endblock %}
+
+{% block header %}
+
+    <header><h1 style="color: #000; font-size: 2em; margin: 0.8em auto;">爱鲜蜂</h1></header>
+
+{% endblock %}
+
+{% block footer %}
+
+    <footer>
+
+        <a href="/axf/home" class="home">
+
+            <dl>
+
+                <dt>
+                    <span></span>
+                </dt>
+                <dd>首页</dd>
+
+            </dl>
+
+        </a>
+        <a href="/axf/ttmarket/" class="market">
+
+            <dl>
+
+                <dt>
+                    <span></span>
+                </dt>
+                <dd>闪购</dd>
+
+            </dl>
+
+        </a>
+        <a href="/axf/cart/" class="cart">
+
+            <dl>
+
+                <dt>
+                    <span></span>
+                </dt>
+                <dd>购物车</dd>
+
+            </dl>
+
+        </a>
+        <a href="/axf/mine/" class="mine">
+
+            <dl>
+
+                <dt>
+                    <span></span>
+                </dt>
+                <dd>我的</dd>
+
+            </dl>
+
+        </a>
+
+    </footer>
+
+{% endblock %}
