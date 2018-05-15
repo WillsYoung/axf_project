@@ -57,8 +57,8 @@
                 <ul>
                     <li>
                         <dl>
-                            <dt><span id="wait_pay_list" class="glyphicon glyphicon-usd"></span>
-
+                            <dt><a href="/axf/wait_pay/">
+                                <span id="wait_pay_list" class="glyphicon glyphicon-usd"></span>
                                 <span class="badge">
                                     <!--待付款的数量-->
                                     {% if user %}
@@ -67,14 +67,16 @@
                                         0
                                     {% endif %}
 
-                                </span></dt>
-                            <dd><a href="/axf/wait_pay/">待付款</a></dd>
+                                </span>
+                            <dd>待付款</dd></a>
+                            </dt>
                         </dl>
 
                     </li>
                     <li>
                         <dl>
-                            <dt><span id="order_payed_list" class="glyphicon glyphicon-envelope"></span>
+                            <dt><a href="/axf/wait_goods/">
+                                <span id="order_payed_list" class="glyphicon glyphicon-envelope"></span>
                                 <span class="badge">
                                     <!--待收货的数量-->
                                     {% if user  %}
@@ -82,14 +84,16 @@
                                     {% else %}
                                         0
                                     {% endif %}
-                                </span></dt>
-                            <dd><a href="/axf/wait_goods/">待收货</a> </dd>
+                                </span>
+                            <dd>待收货 </dd></a>
+                            </dt>
                         </dl>
 
                     </li>
                     <li>
                         <dl>
-                            <dt><span class="glyphicon glyphicon-pencil"></span>
+                            <dt>
+                                <span class="glyphicon glyphicon-pencil"></span>
                             <span class="badge">
                                 {% if user %}
                                     {{ wait_evaluate }}

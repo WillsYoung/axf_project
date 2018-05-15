@@ -16,22 +16,27 @@
             <div class="form-group">
                 <label for="exampleInputEmail1">用户</label>
                 <input id="username" type="text" name="username" class="form-control" placeholder="用户名">
-                <p id="username_info" style="color: #0f0;">请输入用户名</p>
+                <p id="username_infoa" style="color: #f00;" hidden>用户名已存在</p>
+                <p id="username_infob" style="color: #0f0;" hidden>用户名有效</p>
                 <span id="username_info"></span>
             </div>
+
             <div class="form-group">
                 <label for="exampleInputEmail1">邮箱</label>
                 <input type="email" name="email" class="form-control" placeholder="邮箱">
             </div>
+
             <div class="form-group">
                 <label for="exampleInputPassword1">密码</label>
                 <input id="password" type="text" name="password" class="form-control" placeholder="密码">
             </div>
+
             <div class="form-group">
                 <label for="exampleInputPassword1">确认密码</label>
                 <input id="password_confirm" type="text" class="form-control" placeholder="确认密码">
                 <span id="password_confirm_info"></span>
             </div>
+
             <div class="form-group">
                 <label for="exampleInputFile">头像</label>
                 <input name="icon" type="file">
@@ -44,7 +49,7 @@
         <script>
             $(function () {
                 var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                $('#username').blur(function () {
+                $('#username').on('blur', function () {
                     var value = $('#username').val();
                     $.ajax({
                         url: '/axf/verify_user/',
@@ -53,11 +58,16 @@
                         dataType: 'json',
                         headers: {'X-CSRFToken': csrf},
                         success: function (msg) {
+                            var txt = document.getElementById('username');
                             if(msg.user){
-                                alert('用户已经存在');
-                                {#$('#username_info').val();#}
-                                {#alert('ok')#}
-                                $('#username')[0].focus()
+                                {#alert('用户已经存在');#}
+                                $('#username_infoa').show();
+                                txt.focus();
+                                $('#username').focus()
+                            }else {
+                                {#alert('用户名有效');#}
+                                $('#username_infoa').hide();
+                                $('#username_infob').show();
                             }
 
                         },

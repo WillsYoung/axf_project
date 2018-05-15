@@ -119,14 +119,15 @@ def mine(request):
     """
     if request.method == 'GET':
 
+        user_order_wait_pay = 0
+        user_order_wait_goods = 0
+        user_order_wait_evaluate = 0
+        user_order_over = 0
+
         ticket = request.COOKIES.get('ticket', 0)
-        # 判断用户是否登录
-        if ticket:
-            user = UserModel.objects.get(ticket=ticket)
-            user_order_wait_pay = 0
-            user_order_wait_goods = 0
-            user_order_wait_evaluate = 0
-            user_order_over = 0
+        # 判断用户是否登录,cookie是否有效这里注意排除别的网站的登录cookie的干扰
+        if ticket and ('TK+' in ticket):
+            user = UserModel.objects.filter(ticket=ticket).first()
             for order in user.ordermodel_set.all():
                 if order.o_status == 0:
                     user_order_wait_pay += 1
@@ -136,18 +137,16 @@ def mine(request):
                     user_order_wait_evaluate += 1
                 elif order.o_status == 10:
                     user_order_over += 1
-            data = {
-                'user': user,
-                'wait_pay': user_order_wait_pay,
-                'wait_goods': user_order_wait_goods,
-                'wait_evaluate': user_order_wait_evaluate,
-                'over': user_order_over
-                }
         else:
             user = False
-            data ={
-                'user': user
-            }
+        data = {
+            'user': user,
+            'wait_pay': user_order_wait_pay,
+            'wait_goods': user_order_wait_goods,
+            'wait_evaluate': user_order_wait_evaluate,
+            'over': user_order_over
+        }
+
         return render(request, 'mine/mine.html', data)
 
 
@@ -161,7 +160,7 @@ def order(request):
         user = request.user
 
         if user and user.id:
-            orders = OrderModel.objects.all()
+            orders = OrderModel.objects.filter(user=user)
             return render(request, 'order/order_list_all.html', {'orders': orders})
         else:
             return HttpResponseRedirect('/axf/login/')

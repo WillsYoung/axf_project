@@ -35,9 +35,12 @@ class AuthMiddleware(MiddlewareMixin):
         ticket = request.COOKIES.get('ticket')
         if not ticket:
             return None
-
-        user = UserModel.objects.filter(ticket=ticket)
-        request.user = user[0]
+        # 判断用户是否登录，cookie是否有效这里注意排除别的网站的登录cookie的干扰
+        if 'TK+' in ticket:
+            user = UserModel.objects.filter(ticket=ticket)
+            request.user = user[0]
+        else:
+            return None
 
 
 
